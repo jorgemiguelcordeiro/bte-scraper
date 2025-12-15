@@ -69,8 +69,10 @@ Caso encontre problemas de rede com o Docker (bloqueios de firewall ou VPN), pod
 **Pré-requisitos:** Ter o [Bun](https://bun.sh/) instalado.
 
 1.  bun install
+
+2.  Instalar as várias dependências a partir de package.json e bun.lock
     
-2.  bun run src/index.ts
+3.  bun run src/index.ts
     
 
 Testes Unitários
@@ -110,19 +112,46 @@ git push
 
 [![CI/CD Pipeline](https://github.com/jorgemiguelcordeiro/bte-scraper/actions/workflows/cicd.yml/badge.svg?branch=main)](https://github.com/jorgemiguelcordeiro/bte-scraper/actions/workflows/cicd.yml)
 
-Estrutura do Output
+Estrutura do Projeto (ficheiros principais)
 ----------------------
 
 Os ficheiros extraídos são organizados automaticamente por Série, Ano e Número:
 
 ```text
-output/
-├── 1_Serie/
-│   ├── 2024/
-│   │   ├── 1/
-│   │   │   └── output.json  <-- Documento Validado
-│   │   └── ...
-└── Separatas/
-    └── ...
+BYTHELAW_EXTRAS/
+├── .github/
+│   └── workflows/
+│       └── cicd.yml       # Definição da Pipeline de CI/CD (GitHub Actions)
+├── src/
+│   ├── crawler.ts         # Navega no site, gere downloads
+│   ├── parser.ts          # Recebe o PDF, limpa o texto e cria o JSON
+│   ├── index.ts           # Orquestra todo o fluxo
+│   ├── types.ts           # Definições de Tipos partilhadas
+│   └── data_validation... # Schema Zod para garantir a qualidade dos dados de saída
+├── tests/
+│   └── crawler.test.ts    # Testes unitários (Mocks) para validar a lógica sem internet
+├── output/                # Pasta onde os dados extraídos (JSONs) são guardados
+├── Dockerfile             # Construir a imagem isolada da aplicação
+
 
 ```
+
+## Future work
+
+### Implementação de técnicas mais avançadas de NLP
+
+Integração de LLMs (Large Language Models): Atualmente, o parser baseia-se em expressões regulares e heurísticas posicionais, que podem falhar em documentos antigos com formatação inconsistente. A integração de um modelo local (ex: Llama 3 ou Mistral) ou API (OpenAI) permitiria extrair entidades (datas, signatários, cláusulas) por contexto semântico e não apenas por padrões de texto, aumentando drasticamente a precisão em documentos não-standard.
+
+### Engenharia e Arquitetura de Dados
+
+- Base de Dados Relacional (PostgreSQL): Em vez de guardar ficheiros JSON locais, os dados estruturados devem ser ingeridos numa base de dados SQL. Isto permitiria consultas complexas. O PostgreSQL suporta nativamente o tipo JSONB, ideal para este cenário híbrido.
+
+- Data Lake para PDFs (S3/MinIO): A arquitetura ideal passaria por guardar os PDFs num Object Storage (como AWS S3 ou Azure Blob Storage) e guardar apenas o URL de referência na base de dados.
+
+- Pipeline de ETL: Substituir o modo streaming simples por uma pipeline orquestrada (usando ferramentas como Apache Airflow ou Prefect). Isto permitiria agendar a execução para dias específicos (quando saem novos BTEs) e gerir falhas de forma granular.
+
+### Acessibilidade 
+
+- API REST: Desenvolver uma camada de API (com FastAPI por exemplo) sobre a base de dados, permitindo que outras aplicações consumam os dados do BTE sem precisarem de correr o scraper.
+
+- Dashboard de Monitorização: Implementar um dashboard para visualizar métricas em tempo real: número de documentos processados, taxa de erros e tempos de resposta do servidor do governo.
