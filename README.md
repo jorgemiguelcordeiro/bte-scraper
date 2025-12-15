@@ -72,9 +72,9 @@ Caso encontre problemas de rede com o Docker (bloqueios de firewall ou VPN), pod
 
 **Pré-requisitos:** Ter o [Bun](https://bun.sh/) instalado.
 
-1.  Bashbun install
+1.  bun install
     
-2.  Bashbun run src/index.ts
+2.  bun run src/index.ts
     
 
 🧪 Testes Unitários
@@ -115,6 +115,7 @@ Este repositório implementa uma pipeline de Integração e Entrega Contínuas (
 
 Os ficheiros extraídos são organizados automaticamente por Série, Ano e Número:
 
+```text
 output/
 ├── 1_Serie/
 │   ├── 2024/
@@ -123,3 +124,5 @@ output/
 │   │   └── ...
 └── Separatas/
     └── ...
+
+```
