@@ -1,11 +1,11 @@
-📜 BTE Extraction Tool
+BTE Extraction Tool
 ======================
 
 Uma ferramenta robusta de **Web Scraping** e **Parsing de PDF** desenvolvida para extrair, estruturar e validar documentos do _Boletim do Trabalho e Emprego_ (BTE).
 
 O projeto foi desenhado com foco em performance (Streaming), integridade de dados (Zod Validation) e portabilidade (Docker).
 
-🚀 Funcionalidades
+Funcionalidades
 ------------------
 
 *   **Streaming Mode:** Processa documentos um a um para minimizar o uso de RAM.
@@ -19,7 +19,7 @@ O projeto foi desenhado com foco em performance (Streaming), integridade de dado
 *   **CI/CD Pipeline:** Testes automáticos e deploy para Docker Hub via GitHub Actions.
     
 
-🐳 Guia Rápido (Modo Docker - Recomendado)
+Guia Rápido (Modo Docker - Recomendado)
 ------------------------------------------
 
 Este projeto utiliza Docker para garantir um ambiente isolado. Não é necessário instalar Node.js ou Bun no seu computador.
@@ -41,9 +41,7 @@ Para extrair documentos, execute o comando abaixo._Nota: Pode definir um limite 
 PowerShell
 
 ```powershell
-docker run --dns 8.8.8.8 --network host -it `
-  -v "${PWD}/output:/app/output" `
-  bte-scraper
+docker run --dns 8.8.8.8 --network host -it -v "${PWD}/output:/app/output" bte-scraper
 ```
 
 
@@ -52,9 +50,7 @@ docker run --dns 8.8.8.8 --network host -it `
 Bash
 
 ```bash
-docker run --dns 8.8.8.8 --network host -it `
-  -v "${pwd}/output:/app/output" `
-  bte-scraper
+docker run --dns 8.8.8.8 --network host -it -v "${pwd}/output:/app/output" bte-scraper
 ```
 
 
@@ -65,7 +61,7 @@ docker run --dns 8.8.8.8 --network host -it `
 > *   \-v ...: Garante que os ficheiros JSON gerados aparecem na sua pasta output local.
 >     
 
-🛠️ Execução Local ("Safe Mode")
+Execução Local ("Safe Mode")
 --------------------------------
 
 Caso encontre problemas de rede com o Docker (bloqueios de firewall ou VPN), pode correr o código diretamente na sua máquina.
@@ -77,7 +73,7 @@ Caso encontre problemas de rede com o Docker (bloqueios de firewall ou VPN), pod
 2.  bun run src/index.ts
     
 
-🧪 Testes Unitários
+Testes Unitários
 -------------------
 
 O projeto inclui testes unitários que utilizam **Mocks** para simular o website do BTE, garantindo que a lógica funciona sem fazer pedidos reais à internet.
@@ -90,7 +86,7 @@ bun run test
 
 > **Nota:** O teste crawler.test.ts valida se a lógica de extração de anos consegue identificar corretamente uma lista de opções num HTML simulado.
 
-🔄 CI/CD & Version Control
+CI/CD & Version Control
 --------------------------
 
 Este repositório implementa uma pipeline de Integração e Entrega Contínuas (CI/CD).
@@ -105,12 +101,12 @@ Este repositório implementa uma pipeline de Integração e Entrega Contínuas (
 **Para submeter alterações e ativar a pipeline:**
 
 ```bash
-1 - git add .  
-2 - git commit -m "Update: melhorias no scraper e documentação"  
-3 - git push   
+git add .  
+git commit -m "Update: melhorias no scraper e documentação"  
+git push   
 ```
 
-📂 Estrutura do Output
+Estrutura do Output
 ----------------------
 
 Os ficheiros extraídos são organizados automaticamente por Série, Ano e Número:
