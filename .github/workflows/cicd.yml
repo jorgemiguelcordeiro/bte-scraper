@@ -1,0 +1,65 @@
+# Este ficheiro define um pipeline CI/CD para um projeto que usa Bun, Vitest e Docker.
+# O pipeline corre testes e, se passarem, constrói e envia uma imagem Docker para o Docker Hub.
+# Certifica-te de configurar os segredos DOCKER_USERNAME e DOCKER_PASSWORD no teu repositório GitHub.
+# Workflow YAML para GitHub Actions
+
+name: CI/CD Pipeline
+
+# Corre quando fazes push para a main
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # --- JOB 1: INTEGRAÇÃO (Testes & Qualidade) ---
+  # Corre os testes usando Vitest
+  test:
+    name: Run Tests (CI)
+    runs-on: ubuntu-latest # Ambiente Ubuntu mais recente
+    steps:
+      - uses: actions/checkout@v4 # Check out the repository
+      
+      # Usar Bun (mais rápido)
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1 # Configura Bun
+        with:
+          bun-version: latest
+          
+      - name: Install dependencies
+        run: bun install --frozen-lockfile # Instala dependências com Bun, usando o lockfile, garantindo consistência
+        
+      - name: Run Tests (Vitest)
+        run: bun run test
+
+  # --- JOB 2: ENTREGA (Docker Build & Push) ---
+  build-and-push:
+    name: Build & Push Docker Image (CD)
+    needs: test # Só corre se os testes passarem!
+    runs-on: ubuntu-latest
+    # Só faz publish se for push na main (não em pull requests)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      # Login no Docker Hub usando os segredos que configuraste
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Configurar o construtor de Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3 #
+
+      # Construir e Enviar
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # Nome da imagem Docker com tag 'latest'
+          tags: ${{ secrets.DOCKER_USERNAME }}/bte-scraper:latest
