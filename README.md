@@ -106,6 +106,10 @@ git commit -m "Update: melhorias no scraper e documentação"
 git push   
 ```
 
+**Para verificar que o workflow CI/CD funcionou pode-se visitar a página do github actions ou simplesmente verificar o status badge abaixo:**
+
+[![CI/CD Pipeline](https://github.com/jorgemiguelcordeiro/bte-scraper/actions/workflows/cicd.yml/badge.svg?branch=main)](https://github.com/jorgemiguelcordeiro/bte-scraper/actions/workflows/cicd.yml)
+
 Estrutura do Output
 ----------------------
 
