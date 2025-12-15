@@ -5,6 +5,14 @@ Uma ferramenta robusta de **Web Scraping** e **Parsing de PDF** desenvolvida par
 
 O projeto foi desenhado com foco em performance (Streaming), integridade de dados (Zod Validation) e portabilidade (Docker).
 
+O desafio consiste em criar um processo totalmente automático composto por duas 
+fases. Na primeira, deve-se recolher todos os links para documentos publicados no BTE. 
+Para cada link, deve-se ser capaz de carregar para memória o PDF correspondente. Nesta 
+fase, não é permitido utilizar soluções de headless browser (e.g.: Puppeteer),  
+apenas HTTP requests. Na segunda fase, deve-se transformar cada PDF num 
+documento JSON em formato de árvore, ignorando elementos acessórios como o 
+índice do documento e os números de página (Mais informações no pdf em anexo)
+
 Funcionalidades
 ------------------
 
